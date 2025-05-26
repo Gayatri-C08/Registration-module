@@ -1,34 +1,32 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
-const Register = () => {
-  const [data, setData] = useState({ name: '', email: '', password: '' });
-  const [msg, setMsg] = useState('');
+function Register() {
+  const [form, setForm] = useState({
+    firstName: '', lastName: '', gender: '', email:'',
+    password: '' , dob: '', phone: ''
+  });
 
-  const handleChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
+  const handleChange = e => setForm({...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    try {
-      const res = await axios.post('http://localhost:5000/api/auth/register', data);
-      setMsg(res.data.msg);
-    } catch (err) {
-      setMsg(err.response?.data?.msg || 'Registration failed');
-    }
+    await axios.post('http://localhost:5000/api/auth/register', form);
+    alert("Registered Successfully");
   };
 
   return (
-    <div className='form-container'>
-      <h2>Register</h2>
-      {msg && <p>{msg}</p>}
-      <form onSubmit={handleSubmit}>
-        <input name="name" placeholder="Name" onChange={handleChange} required />
-        <input name="email" placeholder="Email" onChange={handleChange} required />
-        <input name="password" type="password" placeholder="Password" onChange={handleChange} required />
-        <button>Register</button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <input name="firstName" placeholder="First Name" onChange={handleChange} />
+      <input name="lastName" placeholder="Last Name" onChange={handleChange} />
+      <input name="gender" placeholder="Gender" onChange={handleChange} />
+      <input name="email" placeholder="Email" onChange={handleChange} />
+      <input name="password" type="password" placeholder="Password" onChange={handleChange} />
+      <input name="dob" type="date" placeholder="Date of Birth" onChange={handleChange} />
+      <input name="phone" placeholder="Phone" onChange={handleChange} />
+      <button type="Submit">Register</button>
+    </form>
   );
-};
+}
 
 export default Register;
