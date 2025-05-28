@@ -1,23 +1,25 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Register from './components/Register';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 
-const PrivateRoute = ({ children }) => {
-  const token = localStorage.getItem('token');
-  return token ? children : <Navigate to="/login" />;
+const AppWrapper = () => {
+  const navigate = useNavigate();
+  return (
+    <Routes>
+      <Route path="/" element={<Register navigate={navigate} />} />
+      <Route path="/register" element={<Register navigate={navigate} />} />
+      <Route path="/login" element={<Login navigate={navigate} />} />
+      <Route path="/dashboard" element={<Dashboard navigate={navigate} />} />
+    </Routes>
+  );
 };
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-      </Routes>
+      <AppWrapper />
     </Router>
   );
 }

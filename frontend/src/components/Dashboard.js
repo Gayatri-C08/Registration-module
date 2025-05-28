@@ -1,24 +1,35 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import UserForm from './UserForm';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import './styles.css';
 
-export default function Dashboard() {
-  const navigate = useNavigate();
+function Dashboard({ navigate }) {
+  const [user, setUser] = useState(null);
 
-  const logout = () => {
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) return navigate('/login');
+    axios.get('http://localhost:5000/user', {
+      headers: { Authorization: `Bearer ${token}` }
+    }).then(res => setUser(res.data)).catch(() => navigate('/login'));
+  }, [navigate]);
+
+  const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-blue-700">Dashboard</h2>
-        <button onClick={logout} className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
-          Logout
-        </button>
-      </div>
-      <UserForm />
+    <div className="dashboard-container">
+      <h2>Welcome to the Dashboard</h2>
+      {user && (
+        <div className="user-card">
+          <p><strong>Name:</strong> {user.firstName} {user.lastName}</p>
+          <p><strong>Email:</strong> {user.email}</p>
+          <button onClick={handleLogout}>Logout</button>
+        </div>
+      )}
     </div>
   );
 }
+
+export default Dashboard;
