@@ -1,35 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import './styles.css';
+import React from 'react';
 
-function Dashboard({ navigate }) {
-  const [user, setUser] = useState(null);
+const Dashboard = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) return navigate('/login');
-    axios.get('http://localhost:5000/user', {
-      headers: { Authorization: `Bearer ${token}` }
-    }).then(res => setUser(res.data)).catch(() => navigate('/login'));
-  }, [navigate]);
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
-  };
+  if (!user) {
+    // Redirect to login if user not found
+    window.location.href = "/login";
+    return null;
+  }
 
   return (
-    <div className="dashboard-container">
-      <h2>Welcome to the Dashboard</h2>
-      {user && (
-        <div className="user-card">
-          <p><strong>Name:</strong> {user.firstName} {user.lastName}</p>
-          <p><strong>Email:</strong> {user.email}</p>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      )}
+    <div>
+      <h2>Welcome, {user.firstName} {user.lastName}!</h2>
+      <p><strong>Email:</strong> {user.email}</p>
+      <p><strong>Phone:</strong> {user.phone}</p>
+      <p><strong>Gender:</strong> {user.gender}</p>
+      <p><strong>Date of Birth:</strong> {user.dob}</p>
+
+      <button onClick={() => {
+        localStorage.clear();
+        window.location.href = "/login";
+      }}>
+        Logout
+      </button>
     </div>
   );
-}
+};
 
 export default Dashboard;
