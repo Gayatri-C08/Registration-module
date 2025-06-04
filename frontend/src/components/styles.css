@@ -1,72 +1,314 @@
+button {
+  margin-top: 20px;
+  background: linear-gradient(135deg, #764ba2, #667eea);
+  color: white;
+  border: none;
+  padding: 14px 0;
+  width: 100%;
+  font-size: 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(101, 41, 255, 0.3);
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #5a2e8a, #4b3481);
+}
+
+.info-text {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #6a4a86;
+}
+
+.info-text span {
+  color: #764ba2;
+  cursor: pointer;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.info-text span:hover {
+  color: #4b0082;
+}
+
+.user-info {
+  text-align: left;
+  margin-top: 20px;
+  color: #5a3e8a;
+  font-size: 16px;
+}
+
+.user-info p {
+  margin: 8px 0;
+  font-weight: 500;
+}
+
+.logout-btn {
+  margin-top: 30px;
+  background: #d9534f;
+  box-shadow: 0 4px 12px rgba(217, 83, 79, 0.4);
+}
+
+.logout-btn:hover {
+  background: #c9302c;
+}
+
 body {
   margin: 0;
+  padding: 0;
   font-family: 'Segoe UI', sans-serif;
-  background: #e7ebcc;
+  background: linear-gradient(120deg, #e0c3fc, #8ec5fc);
+  min-height: 100vh;
 }
 
-.form-container {
+.register-page {
   display: flex;
-  height: 100vh;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
 }
 
-.form-card {
-  background: rgb(235, 135, 135);
-  padding: 30px;
+.register-card {
+  background: #fff;
+  padding: 40px 30px;
   border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(20, 12, 12, 0.1);
-  width: 320px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
+  gap: 15px;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
-.form-card h2 {
+.register-card h2 {
   text-align: center;
+  color: #4b0082;
   margin-bottom: 20px;
-  color: #220e19;
 }
 
-.form-card input {
-  margin-bottom: 15px;
-  padding: 10px;
-  font-size: 14px;
-  border-radius: 8px;
-  border: 1px solid #dd7575;
+.register-card input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: all 0.3s ease;
 }
 
-.form-card button {
-  padding: 10px;
-  background-color: #0c0f12;
-  color: rgb(121, 224, 108);
-  border-radius: 8px;
+.register-card input:focus {
+  border-color: #6a0dad;
+  outline: none;
+  box-shadow: 0 0 5px #6a0dad88;
+}
+
+.register-card button {
+  background-color: #6a0dad;
+  color: white;
+  padding: 12px;
+  font-size: 16px;
   border: none;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.form-card button:hover {
-  background-color: #0056b3;
+.register-card button:hover {
+  background-color: #5a0099;
 }
 
-.form-link {
+.login-link {
   text-align: center;
-  margin-top: 10px;
   font-size: 14px;
-  color: #0e1013;
-  cursor: pointer;
+}
+
+.login-link a {
+  color: #6a0dad;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-link a:hover {
   text-decoration: underline;
 }
 
-.dashboard-container {
-  padding: 40px;
-  text-align: center;
+@keyframes fadeIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
 }
 
-.user-card {
-  background: #863fe4;
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.login-card {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.login-card h2 {
+  text-align: center;
+  color: #4b0082;
+  margin-bottom: 20px;
+}
+
+.login-card input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.login-card input:focus {
+  border-color: #6a0dad;
+  outline: none;
+  box-shadow: 0 0 5px #6a0dad88;
+}
+
+.login-card button {
+  background-color: #6a0dad;
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-card button:hover {
+  background-color: #5a0099;
+}
+
+.register-link {
+  text-align: center;
+  font-size: 14px;
+}
+
+.register-link a {
+  color: #6a0dad;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+.dashboard {
+  background: linear-gradient(to right, #f4e2d8, #ba5370);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+.dashboard-card {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 500px;
+  animation: slideIn 0.4s ease-in-out;
+}
+
+.dashboard-card h2 {
+  text-align: center;
+  color: #6a0dad;
+  margin-bottom: 25px;
+}
+
+.dashboard-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-row input {
+  flex: 1;
+}
+
+.dashboard-card input,
+.dashboard-card select,
+.dashboard-card textarea {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.dashboard-card input:focus,
+.dashboard-card select:focus,
+.dashboard-card textarea:focus {
+  border-color: #6a0dad;
+  box-shadow: 0 0 5px #6a0dad88;
+  outline: none;
+}
+
+.dashboard-card textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.dashboard-card button {
+  background-color: #6a0dad;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.dashboard-card button:hover {
+  background-color: #5a0099;
+}
+
+.logout-btn {
+  background-color: #ff4d4d;
   margin-top: 20px;
-  padding: 20px;
-  border-radius: 10px;
-  display: inline-block;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.logout-btn:hover {
+  background-color: #cc0000;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
