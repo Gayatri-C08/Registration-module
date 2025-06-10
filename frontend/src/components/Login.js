@@ -1,59 +1,65 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "./styles.css";
+import axios from "axios";
+import "../styles.css";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await axios.post("http://localhost:5000/api/login", formData);
+      const { token } = res.data;
 
-      const data = await res.json();
-      if (res.ok) {
-        localStorage.setItem("token", data.token);
-        alert("Login successful!");
-        navigate("/dashboard");
-      } else {
-        alert(data.message || "Invalid credentials");
-      }
+      // Store token and redirect
+      localStorage.setItem("token", token);
+      navigate("/dashboard");
     } catch (err) {
       console.error(err);
-      alert("Login failed. Please try again.");
+      setError("Invalid email or password");
     }
   };
 
   return (
-    <div className="login-page">
-      <form className="login-card" onSubmit={handleLogin}>
-        <h2> Welcome Back!</h2>
-        <input
-          type="email"
-          placeholder="📧 Email Address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="🔑 Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Login</button>
-        <p className="register-link">
+    <div className="auth-container">
+      <div className="auth-box">
+        <h2 className="auth-title">Login to Your Account</h2>
+        {error && <p className="auth-error">{error}</p>}
+
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <label>Email Address</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+
+          <button type="submit" className="auth-button">Login</button>
+        </form>
+
+        <p className="auth-footer">
           Don’t have an account? <Link to="/register">Register here</Link>
         </p>
-      </form>
+      </div>
     </div>
   );
 };
