@@ -1,67 +1,88 @@
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const verifyToken = require('../middleware/verifyToken');
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const bcrypt = require("bcryptjs");
 
-const router = express.Router();
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+mongoose.connect("mongodb://localhost:27017/userAuth", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const UserSchema = new mongoose.Schema({
+  name: String,
+  email: { type: String, unique: true },
+  password: String,
+  gender: String,
+  dob: String,
+});
+
+const User = mongoose.model("User", UserSchema);
 
 // Register
-router.post('/register', async (req, res) => {
+app.post("/api/register", async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { name, email, password, gender, dob } = req.body;
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) return res.status(400).json({ message: "User already exists" });
+
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ firstName, lastName, email, password: hashedPassword });
-    await user.save();
-    res.status(201).json({ message: 'Registered successfully' });
+
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      gender,
+      dob,
+    });
+
+    await newUser.save();
+    res.status(201).json({ message: "User registered" });
   } catch (err) {
-    res.status(400).json({ error: 'User already exists or invalid input' });
+    console.error("Registration Error:", err);
+    res.status(500).json({ message: "Registration failed" });
   }
 });
 
 // Login
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (!user || !(await bcrypt.compare(password, user.password)))
-    return res.status(400).json({ message: 'Invalid credentials' });
-
-  const token = jwt.sign({ id: user._id }, 'secretkey', { expiresIn: '1h' });
-  res.json({
-    message: 'Login successful',
-    token,
-    user: {
-      id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email
-    }
-  });
-});
-
-// Get single user
-router.get('/user', verifyToken, async (req, res) => {
+app.post("/api/login", async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
-    if (!user) return res.status(404).json({ message: 'User not found' });
-    res.json({ user });
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: "Invalid credentials" });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+
+    res.json(user);
   } catch (err) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Login failed" });
   }
 });
 
-// Get all users
-router.get('/users', verifyToken, async (req, res) => {
-  const users = await User.find().select('-password');
-  res.json({ users });
+app.get("/api/users", async (req, res) => {
+  const users = await User.find();
+  res.json(users);
 });
 
-router.get('/dashboard', verifyToken, async (req, res) => {
-  const user = await User.findById(req.user.id).select('-password');
-  res.json({
-    message: 'Welcome to the dashboard',
-    user,
-  });
+app.put("/api/users/:id", async (req, res) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ message: "Update failed" });
+  }
 });
 
-module.exports = router;
+app.listen(5000, () => console.log("Server running on http://localhost:5000"));
