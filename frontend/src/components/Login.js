@@ -1,65 +1,51 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../styles.css";
 
 const Login = () => {
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
+  const [form, setForm] = useState({ email: "", password: "" });
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
     try {
-      const res = await axios.post("http://localhost:5000/api/login", formData);
-      const { token } = res.data;
-
-      // Store token and redirect
-      localStorage.setItem("token", token);
+      const res = await axios.post("http://localhost:5000/api/login", form);
+      localStorage.setItem("user", JSON.stringify(res.data));
       navigate("/dashboard");
     } catch (err) {
-      console.error(err);
-      setError("Invalid email or password");
+      alert("Invalid credentials");
     }
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-box">
-        <h2 className="auth-title">Login to Your Account</h2>
-        {error && <p className="auth-error">{error}</p>}
-
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <label>Email Address</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-
-          <button type="submit" className="auth-button">Login</button>
-        </form>
-
-        <p className="auth-footer">
-          Don’t have an account? <Link to="/register">Register here</Link>
-        </p>
-      </div>
+    <div className="container">
+      <h2>Login</h2>
+      <input
+        name="email"
+        placeholder="📧 Email"
+        onChange={handleChange}
+        required
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder="🔒 Password"
+        onChange={handleChange}
+        required
+      />
+      <button onClick={handleLogin}>Login</button>
+      <p style={{ marginTop: "10px" }}>
+        Not registered?{" "}
+        <span
+          style={{ color: "blue", cursor: "pointer" }}
+          onClick={() => navigate("/register")}
+        >
+          Register here
+        </span>
+      </p>
     </div>
   );
 };
