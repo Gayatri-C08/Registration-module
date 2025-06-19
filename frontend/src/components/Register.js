@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../styles.css"; // Make sure this file contains the common styles
 
 const Register = () => {
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
+    phone: "",
     gender: "",
     dob: "",
   });
@@ -30,55 +32,24 @@ const Register = () => {
   return (
     <div className="container">
       <h2>Register</h2>
-      <input
-        name="name"
-        placeholder="👤 Name"
-        onChange={handleChange}
-        required
-      />
-      <input
-        name="email"
-        placeholder="📧 Email"
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="password"
-        name="password"
-        placeholder="🔒 Password"
-        onChange={handleChange}
-        required
-      />
-      <select
-        name="gender"
-        onChange={handleChange}
-        defaultValue=""
-        required
-      >
-        <option value="" disabled>
-          🚻 Select Gender
-        </option>
+
+      <input className="input-field" name="name" placeholder="👤 Name" onChange={handleChange} />
+      <input className="input-field" name="email" placeholder="📧 Email" onChange={handleChange} />
+      <input className="input-field" type="password" name="password" placeholder="🔒 Password" onChange={handleChange} />
+      <input className="input-field" name="phone" placeholder="📱 Phone Number" onChange={handleChange} />
+
+      <select className="input-field" name="gender" onChange={handleChange} defaultValue="">
+        <option value="" disabled>🚻 Select Gender</option>
         <option value="Male">👦 Male</option>
         <option value="Female">👧 Female</option>
         <option value="Other">🌈 Other</option>
       </select>
-      <input
-        type="date"
-        name="dob"
-        onChange={handleChange}
-        required
-      />
-      <button onClick={handleRegister}>Register</button>
 
-      <p style={{ marginTop: "10px" }}>
-        Already registered?{" "}
-        <span
-          style={{ color: "blue", cursor: "pointer" }}
-          onClick={() => navigate("/login")}
-        >
-          Login here
-        </span>
-      </p>
+      <input className="input-field" type="date" name="dob" onChange={handleChange} />
+
+      <button className="submit-btn" onClick={handleRegister}>Register</button>
+
+      <p>Already registered? <a href="/login">Login here</a></p>
     </div>
   );
 };
